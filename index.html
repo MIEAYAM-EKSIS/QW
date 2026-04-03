@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Nyanyian Sunyi Alamku — Puisi Bintang</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #d9c6a7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            font-family: 'Times New Roman', 'Georgia', 'Palatino', 'Book Antiqua', serif;
+            position: relative;
+        }
+
+        /* Lembar kertas kerajaan */
+        .royal-parchment {
+            max-width: 950px;
+            width: 100%;
+            background: #fef3db;
+            background-image: 
+                linear-gradient(to bottom, rgba(210, 180, 140, 0.2), rgba(210, 180, 140, 0.05)),
+                repeating-linear-gradient(0deg, rgba(160, 120, 70, 0.08) 0px, rgba(160, 120, 70, 0.08) 2px, transparent 2px, transparent 6px);
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.4), inset 0 0 50px rgba(210, 180, 140, 0.3);
+            border-radius: 4px 12px 12px 4px;
+            padding: 2.5rem 2.8rem 3rem 2.8rem;
+            position: relative;
+            border-left: 8px solid #b5976e;
+            border-right: 1px solid #e6d5b3;
+        }
+
+        .royal-parchment::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            background: radial-gradient(ellipse at 30% 40%, rgba(100, 60, 20, 0.03) 0%, transparent 70%);
+            border-radius: inherit;
+        }
+
+        .royal-parchment::after {
+            content: "✧";
+            font-size: 24px;
+            color: #b5976e;
+            position: absolute;
+            bottom: 18px;
+            right: 28px;
+            opacity: 0.5;
+            font-family: monospace;
+        }
+
+        .title-section {
+            text-align: center;
+            border-bottom: 2px solid #c9aa7b;
+            margin-bottom: 1.8rem;
+            padding-bottom: 0.8rem;
+        }
+
+        .main-title {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: #4a2f1a;
+            text-shadow: 2px 2px 0 rgba(160, 110, 60, 0.15);
+            font-family: 'Georgia', 'Times New Roman', serif;
+            text-transform: uppercase;
+        }
+
+        .sub-quote {
+            font-style: italic;
+            color: #7c5e3a;
+            margin-top: 8px;
+            font-size: 0.85rem;
+        }
+
+        .royal-credit {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 0.8rem;
+            border-top: 1px solid #e2cfaa;
+            display: inline-block;
+            width: auto;
+            padding: 6px 18px;
+            background: rgba(200, 170, 120, 0.15);
+            border-radius: 40px;
+            letter-spacing: 1.5px;
+            font-family: monospace;
+        }
+
+        .royal-credit span {
+            font-family: 'Georgia', serif;
+            color: #6b4c2c;
+        }
+
+        .poem-container {
+            margin: 2rem 0 1.2rem;
+            font-size: 1.25rem;
+            line-height: 1.85;
+            color: #2c1e0f;
+            text-align: left;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            min-height: 500px;
+        }
+
+        .poem-line {
+            margin-bottom: 0.65rem;
+            min-height: 2rem;
+        }
+
+        .stanza-break {
+            height: 1.2rem;
+        }
+
+        .thank-you-message {
+            text-align: center;
+            margin-bottom: 2rem;
+            background: #e8dbc0;
+            display: inline-block;
+            width: auto;
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-family: 'Georgia', serif;
+            font-size: 1rem;
+            color: #3e2a18;
+            border-left: 3px solid #c6a16e;
+            border-right: 3px solid #c6a16e;
+            letter-spacing: 0.8px;
+            box-shadow: inset 0 0 6px rgba(90, 60, 20, 0.1);
+            backdrop-filter: blur(2px);
+        }
+
+        .quill-icon {
+            text-align: right;
+            font-size: 24px;
+            opacity: 0.5;
+            margin-top: 1rem;
+            letter-spacing: 8px;
+        }
+
+        .watermark-text {
+            position: absolute;
+            bottom: 20px;
+            left: 30px;
+            font-size: 11px;
+            color: #cfba8f;
+            font-style: italic;
+            pointer-events: none;
+        }
+
+        /* Popup kerajaan */
+        .royal-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            font-family: 'Georgia', serif;
+        }
+        .popup-card {
+            background: #fef3db;
+            max-width: 380px;
+            width: 85%;
+            padding: 2rem 1.8rem;
+            border-radius: 24px;
+            border-left: 6px solid #b5976e;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.3);
+            text-align: center;
+            color: #2c1a0a;
+            position: relative;
+        }
+        .popup-card h3 {
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            font-family: 'Georgia', serif;
+        }
+        .popup-card p {
+            margin: 1rem 0 1.5rem;
+            font-size: 1rem;
+            font-style: italic;
+        }
+        .popup-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        .popup-btn {
+            padding: 8px 28px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            transition: 0.2s;
+            background: #e2d1b0;
+            color: #3b2a18;
+            border: 1px solid #b28b5e;
+        }
+        .popup-btn.recommend {
+            background: #2c2b26;
+            color: #f7efda;
+            border: 1px solid #c9ad7a;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .popup-btn.recommend:hover {
+            background: #1f1e1a;
+            transform: scale(1.02);
+        }
+        .popup-btn:hover {
+            background: #cbbd97;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .royal-parchment { padding: 1.5rem; }
+            .main-title { font-size: 2rem; }
+            .poem-container { font-size: 1rem; }
+        }
+        .vintage-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.08) 100%);
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+<div class="vintage-overlay"></div>
+<div class="royal-parchment">
+    <div class="title-section">
+        <div class="main-title">✧ NYANYIAN SUNYI ALAMKU ✧</div>
+        <div class="sub-quote">— a midnight reverie —</div>
+    </div>
+
+    <div style="display: flex; justify-content: center; flex-wrap: wrap;">
+        <div class="royal-credit">
+            <span>⚜ created by bintang ⚜<br>inspired by Dead Poets Society & Alexander Pushkin ⚜</span>
+        </div>
+    </div>
+
+    <div style="display: flex; justify-content: center; margin-top: 0px; margin-bottom: 10px;">
+        <div class="thank-you-message" id="thankYouMsg">
+            ✨ Makasih bu isra udah buka web ini!! ✨
+        </div>
+    </div>
+
+    <div class="poem-container" id="poemContainer"></div>
+
+    <div class="quill-icon">✍︎ ✦ ✎</div>
+    <div class="watermark-text">— ex animo —</div>
+
+    <audio id="bgAudio" loop preload="auto">
+        <source src="Lagu1.mp3" type="audio/mpeg">
+        Browsermu tidak mendukung tag audio.
+    </audio>
+</div>
+
+<script>
+    (function() {
+        // ========== PUISI MUNCUL PER HURUF (HARRY POTTER STYLE) ==========
+        const fullPoem = [
+            "Di bawah langit yang diam namun luas,",
+            "aku menemukan suara yang tak bersuara—",
+            "angin yang lembut mengusap waktu,",
+            "membawa bisikan sunyi yang mengajakku hidup hari ini,",
+            "bukan nanti.",
+            "",
+            "Pepohonan berdiri tanpa keluh,",
+            "mengajarkan kuat tanpa perlu terlihat gagah;",
+            "daunnya jatuh bukan karena kalah,",
+            "melainkan karena tahu kapan harus melepaskan.",
+            "Dari sana aku mengerti,",
+            "hidup bukan tentang bertahan selamanya,",
+            "tetapi tentang berani berubah.",
+            "",
+            "Sungai mengalir tanpa ragu,",
+            "melewati batu, luka, dan jarak panjang,",
+            "namun tetap jernih dalam tujuannya.",
+            "Seperti itu pula aku ingin berjalan—",
+            "tidak selalu mudah,",
+            "namun tetap setia pada arah yang kupilih.",
+            "",
+            "Dan ketika senja turun perlahan,",
+            "alamku tidak pernah benar-benar pergi;",
+            "ia tinggal di dalam dada,",
+            "menjadi cahaya kecil yang terus mengingatkan:",
+            "hidup ini singkat,",
+            "maka jalani dengan penuh arti."
+        ];
+
+        const container = document.getElementById("poemContainer");
+        if (!container) return;
+        container.innerHTML = "";
+
+        const lineElements = [];
+        for (let i = 0; i < fullPoem.length; i++) {
+            const lineText = fullPoem[i];
+            if (lineText === "") {
+                const stanzaDiv = document.createElement("div");
+                stanzaDiv.className = "stanza-break";
+                container.appendChild(stanzaDiv);
+                lineElements.push(null);
+            } else {
+                const lineDiv = document.createElement("div");
+                lineDiv.className = "poem-line";
+                lineDiv.innerHTML = "";
+                container.appendChild(lineDiv);
+                lineElements.push(lineDiv);
+            }
+        }
+
+        let currentLineIndex = 0;
+        let currentCharIndex = 0;
+        const typingSpeed = 45;
+        const lineDelay = 180;
+        const stanzaDelay = 450;
+
+        function isStanzaBreak(idx) { return fullPoem[idx] === ""; }
+        function getDelayForLine(idx) {
+            if (isStanzaBreak(idx)) return 0;
+            if (idx > 0 && fullPoem[idx-1] === "") return stanzaDelay;
+            return lineDelay;
+        }
+
+        function typeNextCharacter() {
+            if (currentLineIndex >= lineElements.length) return;
+            const currentElem = lineElements[currentLineIndex];
+            if (currentElem === null) {
+                currentLineIndex++;
+                setTimeout(() => typeNextCharacter(), stanzaDelay);
+                return;
+            }
+            const targetText = fullPoem[currentLineIndex];
+            if (!targetText) {
+                currentLineIndex++;
+                typeNextCharacter();
+                return;
+            }
+            if (currentCharIndex < targetText.length) {
+                const newChar = targetText.charAt(currentCharIndex);
+                currentElem.innerHTML += newChar;
+                currentCharIndex++;
+                let speed = typingSpeed;
+                if (",.;:-—".includes(newChar)) speed = typingSpeed + 35;
+                if (newChar === " ") speed = typingSpeed - 10;
+                setTimeout(typeNextCharacter, speed);
+            } else {
+                currentLineIndex++;
+                currentCharIndex = 0;
+                let pause = getDelayForLine(currentLineIndex);
+                setTimeout(() => typeNextCharacter(), pause);
+            }
+        }
+
+        // ========== POPUP MUSIK (IYA / TIDAK) ==========
+        const audio = document.getElementById("bgAudio");
+        let musicAllowed = false;
+
+        function showMusicPopup() {
+            const popupDiv = document.createElement("div");
+            popupDiv.className = "royal-popup";
+            popupDiv.innerHTML = `
+                <div class="popup-card">
+                    <h3>🎻 𝔖𝔴𝔞𝔫 𝔏𝔞𝔨𝔢</h3>
+                    <p>Izinkan musik menemani puisimu?</p>
+                    <div class="popup-buttons">
+                        <button class="popup-btn recommend" id="yesMusic">IYA (direkomendasikan)</button>
+                        <button class="popup-btn" id="noMusic">TIDAK</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(popupDiv);
+
+            const yesBtn = document.getElementById("yesMusic");
+            const noBtn = document.getElementById("noMusic");
+
+            yesBtn.addEventListener("click", () => {
+                musicAllowed = true;
+                popupDiv.remove();
+                startMusic();
+                startPoem();
+            });
+            noBtn.addEventListener("click", () => {
+                musicAllowed = false;
+                popupDiv.remove();
+                startPoem();
+            });
+        }
+
+        function startMusic() {
+            if (!musicAllowed) return;
+            audio.play().then(() => {
+                console.log("Swan Lake mulai mengalun");
+            }).catch(e => {
+                console.warn("Autoplay gagal, tetap lanjut puisi");
+            });
+        }
+
+        function startPoem() {
+            setTimeout(() => {
+                typeNextCharacter();
+            }, 300);
+        }
+
+        // Animasi ucapan terima kasih
+        const thankDiv = document.getElementById("thankYouMsg");
+        if (thankDiv) {
+            thankDiv.style.opacity = "0";
+            thankDiv.style.transform = "scale(0.96)";
+            thankDiv.style.transition = "opacity 0.7s ease, transform 0.5s ease";
+            setTimeout(() => {
+                thankDiv.style.opacity = "1";
+                thankDiv.style.transform = "scale(1)";
+            }, 200);
+        }
+
+        // Tampilkan popup musik terlebih dahulu
+        showMusicPopup();
+
+        // efek sentuhan klasik di kertas (opsional)
+        const parchment = document.querySelector(".royal-parchment");
+        if(parchment) {
+            parchment.addEventListener('click', (e) => {
+                const ripple = document.createElement('span');
+                ripple.style.position = 'absolute';
+                ripple.style.width = '34px';
+                ripple.style.height = '34px';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'radial-gradient(circle, rgba(160,120,70,0.25), transparent)';
+                ripple.style.pointerEvents = 'none';
+                ripple.style.left = `${e.clientX - parchment.getBoundingClientRect().left - 17}px`;
+                ripple.style.top = `${e.clientY - parchment.getBoundingClientRect().top - 17}px`;
+                ripple.style.transition = 'all 0.5s ease-out';
+                parchment.style.position = 'relative';
+                parchment.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 500);
+            });
+        }
+
+        console.log("%c✧ Carpe Diem. Swan Lake menanti pilihanmu. ✧", "color: #a77f48; font-size: 13px; font-style: italic; font-family: monospace;");
+    })();
+</script>
+</body>
+</html>
